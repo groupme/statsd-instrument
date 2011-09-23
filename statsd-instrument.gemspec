@@ -12,4 +12,5 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
 
   s.add_development_dependency 'mocha'
+  s.add_development_dependency 'eventmachine', '1.0.0.beta.3'
 end

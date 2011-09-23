@@ -1,3 +1,4 @@
+$:<< '.' << './lib'
 require 'statsd-instrument'
 require 'test/unit'
 require 'mocha'
@@ -26,7 +27,7 @@ class ActiveMerchant::Gateway < ActiveMerchant::Base
 
   def self.sync
     true
-  end 
+  end
 
   def self.singleton_class
     class << self; self; end
@@ -147,7 +148,7 @@ class StatsDTest < Test::Unit::TestCase
     StatsD.increment('fooz')
     StatsD.enabled = true
   end
-  
+
   def test_statsd_measure_with_explicit_value
     StatsD.expects(:write).with('values.foobar', 42, :ms)
 

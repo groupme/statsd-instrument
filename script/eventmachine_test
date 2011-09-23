@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'bundler'
+Bundler.setup
+require 'statsd-instrument'
+require 'eventmachine'
+
+unless ARGV[0]
+  puts "usage: #{$0} host:port"
+  exit(1)
+end
+
+puts "server: #{ARGV[0]}"
+StatsD.server = ARGV[0]
+StatsD.mode = :production
+
+EM.run do
+  EM.add_periodic_timer(1) do
+    puts "increment"
+    StatsD.increment('Test.increment')
+  end
+end

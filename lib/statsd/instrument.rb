@@ -1,5 +1,5 @@
-require 'socket'
 require 'benchmark'
+require 'statsd/socket_adapter'
 
 module StatsD
   class << self
@@ -90,7 +90,7 @@ module StatsD
   def self.measure(key, milli = nil)
     result = nil
     ms = milli || Benchmark.ms do
-      result = yield 
+      result = yield
     end
 
     write(key, ms, :ms)
@@ -105,7 +105,7 @@ module StatsD
   private
 
   def self.socket
-    @socket ||= UDPSocket.new
+    @socket ||= SocketAdapter.new(host, port)
   end
 
   def self.write(k,v,op, sample_rate = 1)
@@ -123,10 +123,9 @@ module StatsD
     command << "|@#{sample_rate}" if sample_rate < 1
 
     if mode == :production
-      socket.send(command, 0, host, port)
+      socket.send(command)
     else
       logger.info "[StatsD] #{command}"
     end
   end
 end
-
